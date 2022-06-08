@@ -1,0 +1,10 @@
+# Folders
+.old/
+Docs/
+
+# VSCode Project Files
+.vscode/
+
+# Nonstanard location only used for local testing
+favicon.ico
+

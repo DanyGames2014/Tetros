@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html id="ajaxchange">
+<head>
+	<meta charset="utf-8">
+	<title>Tetros</title>
+	<script src=".//script/menu.js" type="application/javascript"></script>
+	<script src=".//script/websocket.js" type="application/javascript"></script>
+	<script src=".//script/game.js" type="application/javascript"></script>
+</head>
+<body>
+</body>
+</html>
+
+<script>
+	var done = false;
+	// On Load
+  	window.addEventListener('load', function() {
+    	console.log('Document Loaded');
+		if(!done){
+			loadLogin();
+			done = true;
+		}else{
+
+		}
+    	
+  	})
+
+  	// First Page - Login Screen
+  	function loadLogin () {
+    	const xhttp = new XMLHttpRequest();
+    	
+    	xhttp.onload = function() {
+      		// document.write(this.responseText)
+			  document.getElementById("ajaxchange").innerHTML = this.responseText;
+    	}
+
+    	xhttp.open("GET", "login.html");
+    	xhttp.send();
+  	}
+
+	function loadMenu () {
+	const xhttp = new XMLHttpRequest();
+	
+	xhttp.onload = function() {
+		//   document.write(this.responseText)
+		document.getElementById("ajaxchange").innerHTML = this.responseText;
+	}
+
+	xhttp.open("GET", "menu.html");
+	xhttp.send();
+	}
+
+	function loadGame () {
+    	const xhttp = new XMLHttpRequest();
+    	
+    	xhttp.onload = function() {
+      		// document.write(this.responseText)
+			  document.getElementById("ajaxchange").innerHTML = this.responseText;
+    	}
+
+    	xhttp.open("GET", "game.html");
+    	xhttp.send();
+  	}
+</script>

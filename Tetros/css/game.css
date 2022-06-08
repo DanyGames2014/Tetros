@@ -1,0 +1,27 @@
+/* Html and Body */
+html {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	background-color: lightblue;
+}
+
+/* Play Field */
+#playField {
+	border: 2px solid black;
+	background-color: #212121;
+}
+
+#score {
+	font-size: 48px;
+	font-family: sans-serif;
+}
+
+#level {
+	font-size: 48px;
+	font-family: sans-serif;
+}

@@ -1,0 +1,102 @@
+/* Html and Body */
+html {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* DIV */
+#main {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	background: url("../img/bg/sussy.png");
+	background-blend-mode: multiply;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+#content {
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
+	height: 100%;
+}
+
+/* Login Form */
+#login_form {
+	width: 450px;
+	height: 550px;
+	border: 1px solid #212121;
+	background-color: rgba(0, 0, 0, 0.8);
+	display: flex;
+	flex-flow: column;
+}
+
+#login_form_title {
+	margin-top: 20px;
+	text-align: center;
+	font-size: 64px;
+	color: rgb(255, 255, 255);
+	font-family: sans-serif;
+}
+
+#login_form_subtitle {
+	margin-top: 10px;
+	margin-bottom: 50px;
+	text-align: center;
+	font-size: 36px;
+	color: rgb(255, 255, 255);
+	font-family: sans-serif;
+}
+
+.login_form_input {
+	margin-top: 35px;
+	/*border: 1px solid blue;*/
+}
+
+.login_form_input_text {
+	float: left;
+	margin-left: 25px;
+	/*border: 1px solid yellow;*/
+	font-size: 24px;
+	color: rgb(255, 255, 255);
+	font-family: sans-serif;
+}
+
+.login_form_input_input {
+	margin-right: 25px;
+	height: 28px;
+	width: 200px;
+	float: right;
+}
+
+#login_form_submit {
+	margin-top: 100px;
+	/*border:  1px solid red;*/
+	display: flex;
+	justify-content: center;
+}
+
+#login_form_submit_button {
+	border:  1px solid #212121;
+	width: 175px;
+	height: 75px;
+	background-color: rgba(100, 100, 100, 0.33);
+	border-radius: 5%;
+	color: white;
+	font-size: 20px;
+	font-family: sans-serif;
+}
+
+#login_form_submit_button:hover {
+	background-color: rgba(120, 120, 120, 0.55);
+}
