@@ -73,6 +73,16 @@ if(!offline){
 			}
 			break;
 
+		case "LEADERBOARD":
+			console.log("LEADERBOARD");
+			for (let i = 0; i < messageData.length; i++) {
+				if(messageData[i] != ""){
+					console.log(messageData[i] + " - " + messageData[i+1]);
+					i++;
+				}
+			}
+			break;
+
 		case "LOGOUT":
 			console.log("Logged Out");
 			alert("Logged Out");

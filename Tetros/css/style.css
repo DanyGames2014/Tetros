@@ -63,6 +63,17 @@ body {
     font-family: sans-serif;
 }
 
+#button_back {
+    height: 100%;
+    width: 150px;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 32px;
+    font-family: sans-serif;
+    cursor: pointer;
+}
+
 /* Content Div */
 #content {
     /* border: 2px solid blue; */
@@ -136,4 +147,13 @@ body {
     to {
         margin-left: 10%;
     }
+}
+
+/* Leaderboard */
+#leaderboard {
+    border: 2px solid red;
+}
+
+#leaderboard_entry {
+    border: 2px solid blue
 }

@@ -18,3 +18,8 @@ function logout(){
     socket.send("type : LOGOUT");
     loadLogin();
 }
+
+function leaderboard(){
+    loadLeaderboard();
+    //socket.send("type : GETLEADERBOARD");
+}

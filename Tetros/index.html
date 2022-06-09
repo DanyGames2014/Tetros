@@ -48,6 +48,7 @@
 
 	xhttp.open("GET", "menu.html");
 	xhttp.send();
+	menu_init();
 	}
 
 	function loadGame () {
@@ -61,4 +62,16 @@
     	xhttp.open("GET", "game.html");
     	xhttp.send();
   	}
+
+	function loadLeaderboard () {
+		const xhttp = new XMLHttpRequest();
+    	
+    	xhttp.onload = function() {
+      		// document.write(this.responseText)
+			  document.getElementById("ajaxchange").innerHTML = this.responseText;
+    	}
+
+    	xhttp.open("GET", "leaderboard.html");
+    	xhttp.send();
+	}
 </script>

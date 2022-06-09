@@ -98,7 +98,7 @@ function update() {
 		}else{
 			activeX = 4;
 			activeY = -4;
-			switch (Math.floor(Math.random() * 7) * 0) {
+			switch (Math.floor(Math.random() * 7)) {
 				case 0:
 					activePiece = I_Piece;
 					break;

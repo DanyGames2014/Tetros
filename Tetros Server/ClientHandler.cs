@@ -233,6 +233,18 @@ namespace Tetros
                                                 }
                                                 break;
 
+                                            case "GETLEADERBOARD":
+                                                string getleaderboard_reponse;
+                                                getleaderboard_reponse = "LEADERBOARD:";
+                                                List<Score> scores = server.leaderboard.getSortedScores();
+                                                foreach (var item in scores)
+                                                {
+                                                    getleaderboard_reponse += item.user.username + ";" + item.score + ";";
+                                                }
+                                                getleaderboard_reponse.Trim();
+                                                writeToNs(getleaderboard_reponse);
+                                                break;
+
                                             default:
                                                 writeToNs("ERROR:UnknownCommand");
                                                 break;
