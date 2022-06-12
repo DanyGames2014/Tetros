@@ -47,7 +47,7 @@ namespace Tetros
             {
                 port = Convert.ToInt32(ConfigurationManager.AppSettings.Get("ServerPort"));
 
-                if (port > 65535 || port < 0)
+                if (port > 65535 || port < 1)
                 {
                     logger.WriteError("Port is outside of the TCP Port Range");
                     Environment.Exit(1);

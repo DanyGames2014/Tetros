@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Configuration;
+using System.IO;
 
 namespace Tetros
 {
@@ -14,11 +16,59 @@ namespace Tetros
     {
         ErrorLang errorLangClass;
         public string[] errorLang;
+        string datenow;
+        string logPath;
+        StreamWriter sw;
+        bool log;
 
         public Logger()
         {
+            log = false;
+            try
+            {
+                log = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("LoggingEnabled"));
+            }
+            catch (Exception e)
+            {
+                WriteError("Invalid value LoggingEnabled in App.config. Logging is Disabled until error is fixed",e);
+            }
+            
+
+            // Only Proceed with Log Related Operation if logging is enabled
+            if (log)
+            {
+                // Create a Filename for the log file using the current time 
+                datenow = DateTime.Now + "";
+                datenow = datenow.Replace(" ", "_").Replace(":", "_").Replace(".", "_");
+                logPath = datenow + ".log";
+
+                // Get The current working directory
+                string currentDir = Directory.GetCurrentDirectory();
+                string logDir = currentDir + Path.DirectorySeparatorChar + "Logs" + Path.DirectorySeparatorChar;
+                if (!Directory.Exists(logDir))
+                {
+                    Directory.CreateDirectory(logDir);
+                }
+
+                // Try to initiate a StreamWriter
+                try
+                {
+                    sw = new StreamWriter(logDir + @"\" + logPath);
+                    sw.AutoFlush = true;
+                }
+                catch (Exception e)
+                {
+                    WriteError("There was an error creating the log file", e);
+                    log = false;
+                }
+            }
+            
+            
+            // Get the Error Messages
             errorLangClass = new();
             errorLang = errorLangClass.errorLang;
+            
+            
         }
 
         // Info
@@ -80,65 +130,76 @@ namespace Tetros
         }
 
         // General
-        public void WriteLine(string message, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(message);
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-
         public void WriteLine(string message, LogLevel level)
         {
+            string logmsg = string.Empty;
+            // Log Into Terminal
             switch (level)
             {
                 case LogLevel.INFO:
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write("[INFO] ");
+                    logmsg += "[INFO] ";
                     break;
 
                 case LogLevel.WARNING:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("[WARN] ");
+                    logmsg += "[WARN] ";
                     break;
 
                 case LogLevel.ERROR:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("[ERROR] ");
+                    logmsg += "[ERROR] ";
                     break;
 
                 case LogLevel.FATAL:
                     Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Write("[FATAL] ");
+                    logmsg += "[FATAL] ";
                     break;
             }
-            Console.WriteLine(message);
+            logmsg += message;
+            Console.WriteLine(logmsg);
             Console.ForegroundColor = ConsoleColor.White;
+
+            // Log into Log File
+            if (log)
+            {
+                sw.WriteLine(logmsg);
+            }
         }
 
         public void WriteLine(string message, LogLevel level, ConsoleColor consoleColor)
         {
+            string logmsg = string.Empty;
+            // Log Into Terminal
             Console.ForegroundColor = consoleColor;
             switch (level)
             {
                 case LogLevel.INFO:
-                    Console.Write("[INFO] ");
+                    logmsg += "[INFO] ";
                     break;
 
                 case LogLevel.WARNING:
-                    Console.Write("[WARN] ");
+                    logmsg += "[WARN] ";
                     break;
 
                 case LogLevel.ERROR:
-                    Console.Write("[ERROR] ");
+                    logmsg += "[ERROR] ";
                     break;
 
                 case LogLevel.FATAL:
-                    Console.Write("[FATAL] ");
+                    logmsg += "[FATAL] ";
                     break;
             }
 
-            Console.WriteLine(message);
+            logmsg += message;
+            Console.WriteLine(logmsg);
             Console.ForegroundColor = ConsoleColor.White;
+
+            // Log into Log File
+            if (log)
+            {
+                sw.WriteLine(logmsg);
+            }
         }
     }
 }
