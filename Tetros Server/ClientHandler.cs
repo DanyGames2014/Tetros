@@ -219,6 +219,7 @@ namespace Tetros
                                                 if (register_result)
                                                 {
                                                     writeToNs("REGISTER:true");
+                                                    logger.WriteInfo("New User Registered : " + frameData["username"]);
                                                 }
                                                 else
                                                 {

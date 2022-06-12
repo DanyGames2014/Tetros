@@ -12,6 +12,7 @@ namespace Tetros
         // TCP Handling
         TcpListener tcpListener;
         List<Thread> handlers = new List<Thread>();
+        int port;
 
         // Managers
         public UserStorage userStorage;
@@ -41,9 +42,26 @@ namespace Tetros
             sessionManager = new SessionManager();
 
             logger = new Logger();
-            
+
+            try
+            {
+                port = Convert.ToInt32(ConfigurationManager.AppSettings.Get("ServerPort"));
+
+                if (port > 65535 || port < 0)
+                {
+                    logger.WriteError("Port is outside of the TCP Port Range");
+                    Environment.Exit(1);
+                }
+            }
+            catch (Exception e)
+            {
+                logger.WriteError("Invalid Value ServerPort in App.config", e);
+                logger.WriteWarn("Using default port 80");
+                port = 80;
+            }
+
             IPAddress IPAddress = Dns.GetHostEntry("localhost").AddressList[0];
-            tcpListener = new TcpListener(IPAddress.Any, 80);
+            tcpListener = new TcpListener(IPAddress.Any, port);
 
             authManager.userStorage.addUser("pablo", "pablo", AccessLevel.Admin);
 
@@ -53,7 +71,7 @@ namespace Tetros
 
         public void Start()
         {
-            logger.WriteInfo("Server Started on Port " + 80);
+            logger.WriteInfo("Server Started on Port " + port);
             while (true)
             {
                 tcpListener.Start();

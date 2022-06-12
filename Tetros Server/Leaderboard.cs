@@ -43,17 +43,24 @@ namespace Tetros
 
         public bool submitScore(int score, User user)
         {
-            Score toadd = new Score(score, user);
-            scores.Add(toadd);
-            return true;
+            lock (scores)
+            {
+                Score toadd = new Score(score, user);
+                scores.Add(toadd);
+                return true;
+            }
+            
         }
 
         public List<Score> getSortedScores()
         {
-            List<Score> sortedScores = new List<Score>();
-            sortedScores = scores;
-            sortedScores.Sort();
-            return sortedScores;
+            lock (scores)
+            {
+                List<Score> sortedScores = new List<Score>();
+                sortedScores = scores;
+                sortedScores.Sort();
+                return sortedScores;
+            }
         }
     }
 }

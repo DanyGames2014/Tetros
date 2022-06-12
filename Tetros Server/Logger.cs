@@ -27,6 +27,11 @@ namespace Tetros
             WriteLine(info_message, LogLevel.INFO);
         }
 
+        public void WriteInfo(string info_message, ConsoleColor consoleColor)
+        {
+            WriteLine(info_message, LogLevel.INFO, consoleColor);
+        }
+
         // Warn
         public void WriteWarn(string warn_message)
         {
@@ -106,8 +111,34 @@ namespace Tetros
                     Console.Write("[FATAL] ");
                     break;
             }
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        public void WriteLine(string message, LogLevel level, ConsoleColor consoleColor)
+        {
+            Console.ForegroundColor = consoleColor;
+            switch (level)
+            {
+                case LogLevel.INFO:
+                    Console.Write("[INFO] ");
+                    break;
+
+                case LogLevel.WARNING:
+                    Console.Write("[WARN] ");
+                    break;
+
+                case LogLevel.ERROR:
+                    Console.Write("[ERROR] ");
+                    break;
+
+                case LogLevel.FATAL:
+                    Console.Write("[FATAL] ");
+                    break;
+            }
 
             Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
