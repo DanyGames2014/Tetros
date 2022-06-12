@@ -4,7 +4,7 @@ namespace Tetros
 {
     public class UserStorage
     {
-        Dictionary<string, User> users;
+        public Dictionary<string, User> users;
 
         public UserStorage()
         {
@@ -42,6 +42,22 @@ namespace Tetros
                     string salt = Utilities.randomString(10);
                     User temp = new(username, Utilities.stringToHash(password + salt), salt, AccessLevel.User);
                     users.Add(username, temp);
+                    return true;
+                }
+            }
+        }
+
+        public bool addUser(User user)
+        {
+            lock (users)
+            {
+                if (users.ContainsKey(user.username))
+                {
+                    return false;
+                }
+                else
+                {
+                    users.Add(user.username, user);
                     return true;
                 }
             }

@@ -52,6 +52,24 @@ namespace Tetros
             
         }
 
+        public bool submitScore(int score, string username, Server server)
+        {
+            lock (scores)
+            {
+                try
+                {
+                    Score toadd = new Score(score, server.userStorage.getUser(username));
+                    scores.Add(toadd);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+        }
+
         public List<Score> getSortedScores()
         {
             lock (scores)

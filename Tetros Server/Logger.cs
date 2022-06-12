@@ -44,7 +44,7 @@ namespace Tetros
 
                 // Get The current working directory
                 string currentDir = Directory.GetCurrentDirectory();
-                string logDir = currentDir + Path.DirectorySeparatorChar + "Logs" + Path.DirectorySeparatorChar;
+                string logDir = currentDir + Path.DirectorySeparatorChar + ConfigurationManager.AppSettings.Get("LoggingDirectory") + Path.DirectorySeparatorChar;
                 if (!Directory.Exists(logDir))
                 {
                     Directory.CreateDirectory(logDir);
