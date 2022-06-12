@@ -18,6 +18,7 @@ body {
     background-blend-mode: multiply;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow-x: hidden;
 }
 
 /* Main Div */
@@ -76,7 +77,6 @@ body {
 
 /* Content Div */
 #content {
-    /* border: 2px solid blue; */
     flex-grow: 1;
     display: flex;
     justify-content: center;
@@ -150,10 +150,61 @@ body {
 }
 
 /* Leaderboard */
+#body_leaderboard {
+    background-attachment: fixed;
+}
+
 #leaderboard {
-    border: 2px solid red;
+    /* border: 2px solid red; */
+    width: 70%;
 }
 
 #leaderboard_entry {
-    border: 2px solid blue
+    /* border: 2px solid blue; */
+    margin-top: 10px;
+    height: 75px;
+    display: flex;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid transparent;
+    background: linear-gradient(#212121, #212121) padding-box, linear-gradient(to right, #08DAF3, #7A04EB) border-box;
+}
+
+#leaderboard_entry_username {
+    /* border: 2px solid #08DAF3; */
+
+    color: white;
+    font-size: 48px;
+    font-family: sans-serif;
+    margin-left: 50px;
+
+    display: flex;
+    flex-shrink: 1;
+    flex-flow: column;
+    justify-content: center;
+    width: 100%;
+}
+
+#leaderboard_entry_score {
+    /* border: 2px solid #7A04EB; */
+
+    color: white;
+    font-size: 48px;
+    font-family: sans-serif;
+    margin-right: 50px;
+
+    display: flex;
+    flex-grow: 1;
+    flex-flow: column;
+    justify-content: center;
+}
+
+#leaderboard_title {
+    color: white;
+    font-size: 72px;
+    font-family: sans-serif;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }

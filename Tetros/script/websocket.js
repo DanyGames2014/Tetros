@@ -1,6 +1,9 @@
 const offline = false;
 var player_username = "";
 
+var leaderboardEntryUsername = [];
+var leaderboardEntryScore = [];
+
 console.log("websocket.js Loaded");
 
 // Create WebSocket connection.
@@ -74,11 +77,14 @@ if(!offline){
 			break;
 
 		case "LEADERBOARD":
+			var leaderboardIndex = 0;
 			console.log("LEADERBOARD");
 			for (let i = 0; i < messageData.length; i++) {
 				if(messageData[i] != ""){
-					console.log(messageData[i] + " - " + messageData[i+1]);
+					leaderboardEntryUsername[leaderboardIndex] = messageData[i];
+					leaderboardEntryScore[leaderboardIndex] = messageData[i+1];
 					i++;
+					leaderboardIndex++;
 				}
 			}
 			break;

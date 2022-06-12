@@ -59,7 +59,7 @@ namespace Tetros
             {
                 if(sessions[key].expiration < timenow)
                 {
-                    Console.WriteLine("Removing Expired Session");
+                    //Console.WriteLine("Removing Expired Session");
                     sessions.Remove(key);
                     return null;
                 }
