@@ -94,10 +94,20 @@ if(!offline){
 			alert("Logged Out");
 			break;
 
+		case "REGISTER":
+			if(messageData[0] === "true"){
+				alert("Register Succesful");
+			}
+			break;
+
 		case "ERROR":
 			switch(messageData[0]){
 				case "UnknownCommand":
 					console.log("Unknown Command");
+					break;
+
+				case "UserExists":
+					alert("A User with this username already exists!");
 					break;
 				
 				default :
@@ -134,5 +144,29 @@ function login () {
 	 	'password : ' + input_password.value
 		);
 	}
+	
+}
+
+// Register
+function register() {
+	const input_username_reg = document.getElementById("login_form_username_input");
+	const input_password_reg = document.getElementById("login_form_password_input");
+
+	if(!offline){
+		socket.send(
+			'\r\n'+
+			'type : ' + 'REGISTER' + '\r\n' +
+			'username : ' + input_username_reg.value + '\r\n' +
+			'password : ' + input_password_reg.value
+		   );
+	}
+
+	console.log(
+		'\r\n'+
+		'type : ' + 'LOGIN' + '\r\n' +
+		'username : ' + input_username_reg.value + '\r\n' +
+		'password : ' + input_password_reg.value
+	   );
+
 	
 }

@@ -26,7 +26,20 @@ namespace Tetros
             }
         }
 
-
+        public bool addUser(string username, string password)
+        {
+            if (users.ContainsKey(username))
+            {
+                return false;
+            }
+            else
+            {
+                string salt = Utilities.randomString(10);
+                User temp = new(username, Utilities.stringToHash(password + salt), salt, AccessLevel.User);
+                users.Add(username, temp);
+                return true;
+            }
+        }
 
         public string getPasswordHash(string username)
         {

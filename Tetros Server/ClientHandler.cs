@@ -214,6 +214,18 @@ namespace Tetros
                                                 }
                                                 break;
 
+                                            case "REGISTER":
+                                                bool register_result = server.userStorage.addUser(frameData["username"], frameData["password"]);
+                                                if (register_result)
+                                                {
+                                                    writeToNs("REGISTER:true");
+                                                }
+                                                else
+                                                {
+                                                    writeToNs("ERROR:UserExists");
+                                                }
+                                                break;
+
                                             case "LOGOUT":
                                                 bool logout_result = sessionManager.invalidateSessionKey(session.sessionKey);
                                                 writeToNs("LOGOUT:" + logout_result);
