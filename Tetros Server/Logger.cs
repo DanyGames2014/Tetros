@@ -12,6 +12,9 @@ namespace Tetros
         FATAL = 3,
     }
 
+    /// <summary>
+    /// Standard class to log messages in terminal and into a file
+    /// </summary>
     public class Logger
     {
         ErrorLang errorLangClass;
@@ -24,6 +27,7 @@ namespace Tetros
         public Logger()
         {
             log = false;
+            // Gets a value from App.Config to see if logging to file is Enabled
             try
             {
                 log = Convert.ToBoolean(ConfigurationManager.AppSettings.Get("LoggingEnabled"));
@@ -71,23 +75,40 @@ namespace Tetros
             
         }
 
-        // Info
+        // --- INFO ---
+        /// <summary>
+        /// Logs the defined message at the INFO Log Level
+        /// </summary>
+        /// <param name="info_message">Message to log</param>
         public void WriteInfo(string info_message)
         {
             WriteLine(info_message, LogLevel.INFO);
         }
 
+        /// <summary>
+        /// Logs the defined message at the INFO Log Level but with custom color
+        /// </summary>
+        /// <param name="info_message">Message to log</param>
+        /// <param name="consoleColor">Custom Color</param>
         public void WriteInfo(string info_message, ConsoleColor consoleColor)
         {
             WriteLine(info_message, LogLevel.INFO, consoleColor);
         }
 
-        // Warn
+        // --- WARN ---
+        /// <summary>
+        /// Logs the defined message at the WARN Log Level
+        /// </summary>
+        /// <param name="warn_message">Message to log</param>
         public void WriteWarn(string warn_message)
         {
             WriteLine(warn_message, LogLevel.WARNING);
         }
 
+        /// <summary>
+        /// Fetches an Error Code from the ErrorLang class and logs that.
+        /// </summary>
+        /// <param name="errorCode">Code of the error to log</param>
         public void WriteWarn(int errorCode)
         {
             try
@@ -101,12 +122,20 @@ namespace Tetros
             
         }
 
-        // Error
+        // --- ERROR ---
+        /// <summary>
+        /// Logs the defined message at the ERROR Log Level
+        /// </summary>
+        /// <param name="error_message">Message to log</param>
         public void WriteError(string error_message)
         {
             WriteLine(error_message, LogLevel.ERROR);
         }
 
+        /// <summary>
+        /// Fetches an Error Code from the ErrorLang class and logs that.
+        /// </summary>
+        /// <param name="errorCode">Code of the error to log</param>
         public void WriteError(int errorCode)
         {
             try
@@ -118,21 +147,36 @@ namespace Tetros
                 WriteError(e);
             }
         }
-
+        
+        /// <summary>
+        /// Logs an Message of given Exception at the ERROR Log Level
+        /// </summary>
+        /// <param name="e">Exception</param>
         public void WriteError(Exception e)
         {
             WriteError(e.Message);
         }
 
+        /// <summary>
+        /// Logs an Message of given Exception at the ERROR Log Level. Allows to include an accompanying message.
+        /// </summary>
+        /// <param name="e">Exception</param>
+        /// <param name="error_message">Message to log alongside the exception</param>
         public void WriteError(string error_message, Exception e)
         {
             WriteError(error_message + Environment.NewLine + e.Message);
         }
 
-        // General
+        // Universal - used by all the others
+        /// <summary>
+        /// Logs the given message at the given Log Level. If enabled also logs to a file
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="level">Level</param>
         public void WriteLine(string message, LogLevel level)
         {
             string logmsg = string.Empty;
+
             // Log Into Terminal
             switch (level)
             {
@@ -160,16 +204,23 @@ namespace Tetros
             Console.WriteLine(logmsg);
             Console.ForegroundColor = ConsoleColor.White;
 
-            // Log into Log File
+            // Log Into Log File
             if (log)
             {
                 sw.WriteLine(logmsg);
             }
         }
 
+        /// <summary>
+        /// Logs the given message at the given Log Level and uses the defined color instead of the default one. If enabled also logs to a file.
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="level">Level</param>
+        /// <param name="consoleColor">Color</param>
         public void WriteLine(string message, LogLevel level, ConsoleColor consoleColor)
         {
             string logmsg = string.Empty;
+
             // Log Into Terminal
             Console.ForegroundColor = consoleColor;
             switch (level)
@@ -195,7 +246,7 @@ namespace Tetros
             Console.WriteLine(logmsg);
             Console.ForegroundColor = ConsoleColor.White;
 
-            // Log into Log File
+            // Log Into Log File
             if (log)
             {
                 sw.WriteLine(logmsg);

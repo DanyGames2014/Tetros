@@ -4,6 +4,9 @@ using System.Configuration;
 
 namespace Tetros
 {
+    /// <summary>
+    /// Class used to manage Sessions
+    /// </summary>
     public class SessionManager
     {
         public Dictionary<string, Session> sessions;
@@ -13,6 +16,9 @@ namespace Tetros
             sessions = new Dictionary<string, Session>();
         }
 
+        /// <summary>
+        /// Creates a session and gives it expiration with the defined expiration in App.config
+        /// </summary>
         public void createSession(Session session)
         {
             int validity = 0;
@@ -32,6 +38,9 @@ namespace Tetros
             sessions.Add(session.sessionKey, session);
         }
 
+        /// <summary>
+        /// Creates a session with given key and user and gives it expiration with the defined expiration in App.config
+        /// </summary>
         public void createSession(string sessionKey, User user)
         {
             int validity = 0;
@@ -52,6 +61,10 @@ namespace Tetros
             sessions.Add(sessionKey, session);
         }
 
+        /// <summary>
+        /// Retrieves a session with the given key
+        /// </summary>
+        /// <param name="key">Session Key</param>
         public Session getSessionWithKey(string key)
         {
             long timenow = DateTimeOffset.Now.ToUnixTimeSeconds();
@@ -74,6 +87,9 @@ namespace Tetros
             }
         }
 
+        /// <summary>
+        /// Determines if user has an active Session
+        /// </summary>
         public bool userHasSession(string username)
         {
             foreach (var item in sessions)
@@ -86,6 +102,9 @@ namespace Tetros
             return false;
         }
 
+        /// <summary>
+        /// Invalidates all sessions this user has
+        /// </summary>
         public bool invalidateSessionForUser(string username)
         {
             bool invalidated = false;
@@ -100,6 +119,9 @@ namespace Tetros
             return invalidated;
         }
 
+        /// <summary>
+        /// Invalidates a session with the defined key
+        /// </summary>
         public bool invalidateSessionKey(string key)
         {
             if (sessions.ContainsKey(key))

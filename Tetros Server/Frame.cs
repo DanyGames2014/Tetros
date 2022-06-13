@@ -2,6 +2,9 @@
 
 namespace Tetros
 {
+    /// <summary>
+    /// This class is used to represent a websocket Frame as an object
+    /// </summary>
     public class Frame
     {
         public bool FIN;

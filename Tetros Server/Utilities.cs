@@ -4,8 +4,16 @@ using System.Text;
 
 namespace Tetros
 {
+    /// <summary>
+    /// Utility Class for Various Functions
+    /// </summary>
     class Utilities
     {
+        /// <summary>
+        /// Takes in a client Websocket Key and generates a Server Websocket Key
+        /// </summary>
+        /// <param name="clientKey">Client Websocket Key</param>
+        /// <returns>Server Websocket Key</returns>
         public static string ServerWebsocketKey(string clientKey)
         {
             string clientKeyMagic = string.Concat(clientKey, "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").Trim();
@@ -13,18 +21,31 @@ namespace Tetros
             return Convert.ToBase64String(SHA1.HashData(data));
         }
 
-        public static bool[] ConvertByteToBoolArray(byte b)
+        /// <summary>
+        /// Converts an Byte Array to a Bool Array
+        /// </summary>
+        /// <param name="toConvert">Byte Array</param>
+        /// <returns>Bool Array</returns>
+        public static bool[] ConvertByteToBoolArray(byte toConvert)
         {
             bool[] result = new bool[8];
 
             for (int i = 0; i < 8; i++)
-                result[i] = (b & (1 << i)) != 0;
+            {
+                result[i] = (toConvert & (1 << i)) != 0;
+            }
 
             Array.Reverse(result);
 
             return result;
         }
 
+        /// <summary>
+        /// Demasks a Frame using the given mask
+        /// </summary>
+        /// <param name="toDemask">Byte Array to demask</param>
+        /// <param name="mask">Mask</param>
+        /// <returns>Demasked Byte Array</returns>
         public static byte[] demask(byte[] toDemask, byte[] mask)
         {
             byte[] decoded = new byte[toDemask.Length];
@@ -37,6 +58,11 @@ namespace Tetros
             return decoded;
         }
 
+        /// <summary>
+        /// Returns the Name of an opcode.
+        /// </summary>
+        /// <param name="opcode">Opcode</param>
+        /// <returns>Name</returns>
         public static string opcodeText(int opcode)
         {
             switch (opcode)
@@ -58,6 +84,11 @@ namespace Tetros
             }
         }
 
+        /// <summary>
+        /// Decodes a Frame
+        /// </summary>
+        /// <param name="frame">Byte Array Received through Websocket</param>
+        /// <returns>Object Representation of the Frame</returns>
         public static Frame decodeFrame(byte[] frame)
         {
             Frame result = new();
@@ -204,6 +235,10 @@ namespace Tetros
             return result;
         }
 
+        /// <summary>
+        /// Encodes a Text Frame using the defined text
+        /// </summary>
+        /// <param name="text">Text to Encode into Frame</param>
         public static byte[] encodeTextFrame(string text)
         {
             byte[] result = null;
@@ -252,6 +287,9 @@ namespace Tetros
             }
         }
 
+        /// <summary>
+        /// Encodes a Pong Frame
+        /// </summary>
         public static byte[] encodePongFrame()
         {
             byte[] result = new byte[2];
@@ -267,6 +305,9 @@ namespace Tetros
             
         }
 
+        /// <summary>
+        /// Encodes an int into 2 byte array
+        /// </summary>
         public static byte[] lengthTo2Byte(int length)
         {
             byte[] result = new byte[2];
@@ -295,6 +336,10 @@ namespace Tetros
             return result;
         }
 
+        /// <summary>
+        /// Returns a random string formed from predefined allowed characters
+        /// </summary>
+        /// <param name="length">The Length of the string</param>
         public static string randomString(int length)
         {
             string validChars = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
@@ -309,6 +354,10 @@ namespace Tetros
             return result;
         }
 
+        /// <summary>
+        /// Hashes a string to SHA512
+        /// </summary>
+        /// <param name="toHash">String To Hash</param>
         public static string stringToHash(string toHash)
         {
             byte[] data = Encoding.UTF8.GetBytes(toHash);

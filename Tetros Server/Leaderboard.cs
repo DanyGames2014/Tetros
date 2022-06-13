@@ -4,6 +4,9 @@ using System.Collections.Generic;
 namespace Tetros
 {
 
+    /// <summary>
+    /// Struct to represent a score as it would be wasteful to represent that as an object.
+    /// </summary>
     public struct Score : IComparable<Score>
     {
         public int score { get; set; }
@@ -32,15 +35,21 @@ namespace Tetros
         }
     }
 
+    /// <summary>
+    /// Class used to keep track of scores
+    /// </summary>
     public class Leaderboard
     {
+        // List of Scores
         public List<Score> scores;
 
+        // Constructor
         public Leaderboard()
         {
             scores = new List<Score>();
         }
 
+        // Submits a new score for the defined user
         public bool submitScore(int score, User user)
         {
             lock (scores)
@@ -52,6 +61,7 @@ namespace Tetros
             
         }
 
+        // Submits a new score with the defined username, searches for the user in the userStorage of the referenced Server instance.
         public bool submitScore(int score, string username, Server server)
         {
             lock (scores)
@@ -70,6 +80,7 @@ namespace Tetros
             }
         }
 
+        // Returns a sorted list of scores
         public List<Score> getSortedScores()
         {
             lock (scores)

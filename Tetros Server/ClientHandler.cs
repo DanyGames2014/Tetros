@@ -7,6 +7,9 @@ using System.Text;
 
 namespace Tetros
 {
+    /// <summary>
+    /// This class is what interfaces with the browser and one instance of this class is created per running instance.
+    /// </summary>
     class ClientHandler
     {
         // Connection Info
@@ -32,7 +35,9 @@ namespace Tetros
         // Logger
         Logger logger;
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ClientHandler(TcpClient client, int ConnectionID, Server server)
         {
             disconnectReason = DisconnectReason.Unknown;
@@ -59,24 +64,29 @@ namespace Tetros
             logger.WriteInfo("Session initiated. Connection ID : " + ConnectionID);
         }
 
+        // Shorthand to reduce clutter
         public void writeToNs(string text)
         {
             byte[] towrite = Utilities.encodeTextFrame(text);
             ns.Write(towrite, 0, towrite.Length);
         }
 
+        /// <summary>
+        /// Main Loop, Runs until the connection isnt closed from the browser side
+        /// </summary>
         public void ConnectionHandler()
         {
             try
             {
                 while (run)
                 {
-
+                    // Websocket Handshake with the Browser
                     logger.WriteInfo("Attempting Handshake");
                     while (handshakeDone == false)
                     {
                         switch (handshakeStage)
                         {
+                            // Receives the initial handshake and parses the GET Request from browser
                             case HandshakeStage.ReceiveHandshake: // STAGE 1
                                 string temp = sr.ReadLine();
                                 if (string.IsNullOrEmpty(temp))
@@ -111,6 +121,7 @@ namespace Tetros
                                 }
                                 break;
 
+                            // Extracts the websocket key, encodes a server websocket key and sends back a response
                             case HandshakeStage.AssembleResponse: // STAGE 2
                                 string response = "" +
                                     "HTTP/1.1 101 Switching Protocols\r\n" +
@@ -122,15 +133,18 @@ namespace Tetros
                                 handshakeStage = HandshakeStage.SendResponse;
                                 break;
 
+                            // Switches a flag to indicate that handshake is done
                             case HandshakeStage.SendResponse:    // STAGE 3
                                 handshakeDone = true;
                                 break;
                         }
                     }
 
+                    // If a handshake is done, the main loop starts executing
                     logger.WriteInfo("Handshake Done");
                     while (handshakeDone)
                     {
+                        // Waits for data on the network stream to be avalible
                         if (ns.DataAvailable)
                         {
                             bool decoded = false;
@@ -173,14 +187,18 @@ namespace Tetros
 
                                     }
 
+                                    // If the Frame was succesfully decoded executes the right command
                                     if (decoded)
                                     {
+                                        // Switch for what command the browser has requested to execute
                                         switch (frameData[key: "type"])
                                         {
+                                            // Sends back a random string of characters, used for testing purposes
                                             case "RANDOM":
                                                 writeToNs("RANDOM:" + Utilities.randomString(10));
                                                 break;
 
+                                            // Attempts to retrieve a session with a given key
                                             case "SESSIONGET":
                                                 Session sessionGET = sessionManager.getSessionWithKey(frameData["sessionKey"]);
                                                 if(sessionGET != null)
@@ -196,6 +214,7 @@ namespace Tetros
                                                 }
                                                 break;
 
+                                            // Authentificates a user
                                             case "LOGIN":
                                                 bool auth = server.authManager.authUser(frameData["username"], frameData["password"]);
                                                 if (auth)
@@ -214,6 +233,7 @@ namespace Tetros
                                                 }
                                                 break;
 
+                                            // Registers a new user
                                             case "REGISTER":
                                                 bool register_result = server.userStorage.addUser(frameData["username"], frameData["password"]);
                                                 if (register_result)
@@ -227,6 +247,7 @@ namespace Tetros
                                                 }
                                                 break;
 
+                                            // Logs user out and invalidates his Session Key
                                             case "LOGOUT":
                                                 bool logout_result = sessionManager.invalidateSessionKey(session.sessionKey);
                                                 writeToNs("LOGOUT:" + logout_result);
@@ -234,6 +255,7 @@ namespace Tetros
                                                 session = null;
                                                 break;
 
+                                            // Submit a new score to the leaderboard
                                             case "SCORESUBMIT":
                                                 try
                                                 {
@@ -245,7 +267,8 @@ namespace Tetros
                                                     writeToNs("ERROR:UnknownUser");
                                                 }
                                                 break;
-
+                                            
+                                            // Returns a sorted leaderboard to the browser
                                             case "GETLEADERBOARD":
                                                 string getleaderboard_reponse;
                                                 getleaderboard_reponse = "LEADERBOARD:";
@@ -257,7 +280,8 @@ namespace Tetros
                                                 getleaderboard_reponse.Trim();
                                                 writeToNs(getleaderboard_reponse);
                                                 break;
-
+                                            
+                                            // Invalid Command
                                             default:
                                                 writeToNs("ERROR:UnknownCommand");
                                                 break;
