@@ -6,7 +6,7 @@ let ctx;
 // Game Settings
 const field_columns = 10;
 const field_rows = 20;
-const block_size = 30;
+const block_size = 50;
 var fallSpeed = 0.1;
 
 // Game Loop
