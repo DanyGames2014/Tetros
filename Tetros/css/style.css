@@ -4,6 +4,11 @@
     --neonline-lightblue: linear-gradient(to right, #08DAF3, #7A04EB);
 }
 
+/* Additional Classes */
+.justifyCenter {
+    justify-content: center !important;
+}
+
 /* HTML & Body */
 html {
     margin: 0;
@@ -36,7 +41,7 @@ body {
     width: 100%;
     /* border: 2px solid yellow; */
     background-color: #090909;
-    background: var(#090909) padding-box, var(--neonline-lightblue) border-box;
+    /* background: var(#090909) padding-box, var(--neonline-lightblue) border-box; */
     border-left: 0px;
     border-right: 0px;
     border-top: 0px;
@@ -214,20 +219,76 @@ body {
     background-attachment: fixed;
 }
 
-/* Play Field */
+#game_content {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+#game_content_left {
+    height: 100%;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.5);
+    border-start-start-radius: 15px;
+    border-end-start-radius: 15px;
+    margin-right: 15px;
+    display: flex;
+    flex-flow: column;
+}
+
+#game_content_right {
+    height: 100%;
+    width: 250px;
+    background: rgba(0, 0, 0, 0.5);
+    border-start-end-radius: 15px;
+    border-end-end-radius: 15px;
+    margin-left: 15px;
+    display: flex;
+    flex-flow: column;
+}
+
+#game_content_right_next {
+    border: 2px solid #212121;
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#game_content_right_next_canvas {
+    width: 100%;
+    height: 100%;
+}
+
+#game_content_right_next_text {
+    color: white;
+    margin-left: 20px;
+    font-size: 42px;
+    font-family: sans-serif;
+}
+
 #playField {
-	/* border: 2px solid black; */
-	background-color: #212121;
+	background: rgba(0, 0, 0, 0.5);
 	width: auto;
-	height: 70vh;
+	height: 90vh;
 }
 
-#score {
-	font-size: 48px;
+#game_content_left_score {
+    margin-top: 20px;
+    margin-left: 20px;
+	font-size: 42px;
 	font-family: sans-serif;
+    color: white;
+    /* border: 2px solid green; */
+    width: 100%;
 }
 
-#level {
-	font-size: 48px;
-	font-family: sans-serif;
+#game_content_left_level {
+    margin-top: 10px;
+    margin-left: 20px;
+    font-size: 42px;
+    font-family: sans-serif;
+    color: white;
+    /* border: 2px solid greenyellow; */
+    width: 100%;
 }

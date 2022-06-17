@@ -6,6 +6,8 @@ var leaderboardEntryScore = [];
 
 console.log("websocket.js Loaded");
 
+//setTimeout(play,500);
+
 // Create WebSocket connection.
 if(!offline){
 	console.log("Opening WebSocket Connection");

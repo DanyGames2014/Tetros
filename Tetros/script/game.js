@@ -3,11 +3,19 @@
 let canvas;
 let ctx;
 
+let canvas_next;
+let ctx_next;
+
 // Game Settings
 const field_columns = 10;
 const field_rows = 20;
+
+const next_columns = 4;
+const next_rows = 4;
+
 const block_size = 50;
-var fallSpeed = 0.1;
+
+var fallSpeed = 0;
 
 // Game Loop
 var gameLoop;
@@ -17,6 +25,7 @@ var lost = false;
 var linesCleared = 0;
 var level = 1;
 var fallprogress = 0;
+var first = true;
 
 // Active Piece
 var active = false;
@@ -30,7 +39,10 @@ var emptyPiece =  [[0,0,0,0],
 				   [0,0,0,0],
 				   [0,0,0,0],
 				   [0,0,0,0]];
-
+var nextPiece =   [[0,0,0,0],
+				   [0,0,0,0],
+				   [0,0,0,0],
+				   [0,0,0,0]];
 
 // Game Field
 var field = [];
@@ -52,8 +64,8 @@ function init(){
 	field = getEmptyField();
 	redrawField();
 
-	scoreText = document.getElementById('score');
-	levelText = document.getElementById('level');
+	scoreText = document.getElementById('game_content_left_score');
+	levelText = document.getElementById('game_content_left_level');
 
 	if(debug_log){console.log('Game Ready')};
 
@@ -64,20 +76,21 @@ function init(){
 	level = 1;
 	fallprogress = 0;
 
-	var gameLoop = setInterval(update, 10);
+	gameLoop = setInterval(update, 10);
+	// var fuckit = setInterval(redrawField, 250);
 }
 
 // Main Game Loop
 function update() {
 	gameTime++;
+	fallSpeed = level / 25;
 	fallprogress += fallSpeed;
 	if(!lost){
 		level = Math.floor((linesCleared+10) / 10)
 
-		scoreText.textContent = score;
-		levelText.textContent = "Level : " + level;
+		scoreText.innerHTML = "Score : <br>" + score;
+		levelText.innerHTML = "Level : <br>" + level;
 
-		fallSpeed = level / 25;
 		if(checkCollisionDown()){
 			drawActive();
 			putActive();
@@ -98,33 +111,15 @@ function update() {
 		}else{
 			activeX = 4;
 			activeY = -4;
-			switch (Math.floor(Math.random() * 7)) {
-				case 0:
-					activePiece = I_Piece;
-					break;
-				case 1:
-					activePiece = J_Piece;
-					break;
-				case 2:
-					activePiece = L_Piece;
-					break;
-				case 3:
-					activePiece = O_Piece;
-					break;
-				case 4:
-					activePiece = S_Piece;
-					break;
-				case 5:
-					activePiece = T_Piece;
-					break;
-				case 6:
-					activePiece = Z_Piece;
-					break;
-				default:
-					console.log("oh fuck");
-					break;
-				}
-
+			activePiece = nextPiece;
+			if(first){
+				nextPiece = randomPiece();
+				activePiece = randomPiece();
+				first = false;
+			}else{
+				nextPiece = randomPiece();
+			}
+				redrawNext();	
 				drawActive();
 				active = true;
 		}	
@@ -135,7 +130,7 @@ function update() {
 function gameOver () {
 	clearInterval(gameLoop);
 	console.log("Game Over");
-	console.table(field);
+	// console.table(field);
 	socket.send(
 		'\r\n'+
 		'type : SCORESUBMIT\r\n' +
@@ -157,10 +152,9 @@ function gameOver () {
 	
 	ctx.fillStyle = "#FF0000";
 	ctx.font = "1px Arial";
-	ctx.fillText("Game Over", 1, 2);
+	ctx.fillText("Game Over", 1, 9);
 
-	
-	setTimeout(gameOverAction, 2000);
+	setTimeout(gameOverAction, 1200);
 }
 
 function gameOverAction() {
@@ -243,7 +237,26 @@ var newField = [
 				   ];
 
 */
-
+function randomPiece(){
+	switch (Math.floor(Math.random() * 7)) {
+		case 0:
+			return I_Piece;
+		case 1:
+			return J_Piece;
+		case 2:
+			return L_Piece;
+		case 3:
+			return O_Piece;
+		case 4:
+			return S_Piece;
+		case 5:
+			return T_Piece;
+		case 6:
+			return Z_Piece;
+		default:
+			return I_Piece;
+	}
+}
 
 function rotateRight (tor) {
 	var newField = [
@@ -449,6 +462,7 @@ function removeActive () {
 	for(var y = 0, lengthY = activePiece.length; y < lengthY; y++){
 		for(var x = 0, lengthX = activePiece[y].length; x < lengthX; x++){
 			if(activePiece[y][x] > 0){
+				ctx.clearRect(x+activeX,y+activeY,1,1);
 				ctx.fillStyle = getColor(getColor(666));
 				ctx.fillRect(x+activeX,y+activeY,1,1);	
 			}
@@ -470,8 +484,16 @@ function putActive () {
 
 // Draw Square
 function drawSquare (x,y,color) {
+	ctx.clearRect(x,y,1,1);
 	ctx.fillStyle = getColor(color);
 	ctx.fillRect(x,y,1,1);
+}
+
+// Draw Next
+function drawSquareNext (x,y,color) {
+	ctx_next.clearRect(x,y,1,1);
+	ctx_next.fillStyle = getColor(color);
+	ctx_next.fillRect(x,y,1,1);
 }
 
 // Create Field and Get 2D Context from Canvas
@@ -479,10 +501,21 @@ function createField () {
 	canvas = document.getElementById('playField'); // Load Canvas into canvas variable
 	ctx = canvas.getContext('2d'); // Get the 2D context
 
+	canvas_next = document.getElementById('game_content_right_next_canvas');
+	ctx_next = canvas_next.getContext('2d');
+
 	ctx.canvas.width = field_columns * block_size;
 	ctx.canvas.height = field_rows * block_size;
 
+	ctx_next.canvas.width = next_columns * block_size;
+	ctx_next.canvas.height = next_rows * block_size;
+	
 	ctx.scale(block_size, block_size);
+	ctx_next.scale(block_size,block_size);
+
+	ctx_next.fillStyle = getColor(4);
+	ctx_next.fillRect(0,0,1,1);
+
 	if(debug_log){console.log('Game Field Created');}
 }
 
@@ -491,6 +524,15 @@ function redrawField () {
 	for(var y = 0, lengthY = field.length; y < lengthY; y++){
 		for(var x = 0, lengthX = field[y].length; x < lengthX; x++){
 			drawSquare(x,y,field[y][x])
+		}
+	}
+}
+
+// Redraw Next
+function redrawNext(){
+	for (let ny = 0; ny < 4; ny++) {
+		for (let nx = 0; nx < 4; nx++) {
+			drawSquareNext(nx,ny,nextPiece[ny][nx]);
 		}
 	}
 }
@@ -508,38 +550,39 @@ function getColor (color) {
 	switch (color) {
 		// I-Block
 		case 1:
-			return "#00FFFF";
+			return "#00FFFFFF";
 			break;
 		// J-Block
 		case 2:
-			return "#0000FF";
+			return "#0000FFFF";
 			break;
 		// L-Block
 		case 3:
-			return "#FFBBBB";
+			return "#FFBBBBFF";
 			break;
 		// O-Block
 		case 4:
-			return "#FFFF00";
+			return "#FFFF00FF";
 			break;
 		// S-Block
 		case 5:
-			return "#00FF00";
+			return "#00FF00FF";
 			break;
 		// T-Block
 		case 6:
-			return "#FF00FF";
+			return "#FF00FFFF";
 			break;
 		// Z-Block
 		case 7:
-			return "#FF0000";
+			return "#FF0000FF";
 			break;
 		case undefined:
-			return "#CDAABB";
+			return "#CDAABBFF";
 			break;
 		// Default
 		default:
-			return "#212121";
+			// return "#21212180";
+			return "#00000000"
 			break;
 	}
 }

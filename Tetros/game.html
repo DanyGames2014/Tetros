@@ -7,10 +7,24 @@
 	<script src=".//script/game.js" type="application/javascript"></script>
 </head>
 <body id="body_game">
-	<canvas id="playField"></canvas>
-	<br>
-	<text id="score">0</text>
-	<br>
-	<text id="level">Level : 0</text>
+	<div id="main" class="justifyCenter">
+		<div id="game_content">
+			<div id="game_content_left">
+				<text id="game_content_left_score">Score : <br>0</text>
+				<text id="game_content_left_level">Level : <br>0</text>
+			</div>
+
+			<canvas id="playField"></canvas>
+
+			<div id="game_content_right">
+				<div id="game_content_right_next">
+					<canvas id="game_content_right_next_canvas">
+
+					</canvas>
+				</div>
+				<text id="game_content_right_next_text">NEXT</text>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
